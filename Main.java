@@ -3,10 +3,13 @@ import java.util.*;
 class Main{
 
   public static void main(String[] args){
-  Scanner stdin = new Scanner(System.in);
-  Grid grid = new Grid();
+    Scanner stdin = new Scanner(System.in);
+    Grid emptyGrid = new Grid();
+    Play play = new Play(emptyGrid);
 
-  grid.showGrid(grid);
-
+    play.makePlay(0);
+    emptyGrid.showGrid(emptyGrid);
+    System.out.println(emptyGrid.freeLine(0));
+    System.out.println(emptyGrid.colFull(0));
   }
 }
