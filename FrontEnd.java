@@ -14,7 +14,30 @@ class FrontEnd{
 
 
   static void title(){
-    System.out.println
+    clearScreen();
+    System.out.println(ANSI_YELLOW + "* CONNECT FOUR *" + ANSI_RESET);
+    System.out.println();
   }
-  
+
+  static void firstPlayerMenu(){
+    System.out.println("Who do you want to go first?");
+    System.out.println(ANSI_CYAN + "1) " + ANSI_RESET + "Me");
+    System.out.println(ANSI_CYAN + "2) " + ANSI_RESET + "CPU");
+    System.out.println();
+    System.out.print("Option: ");
+  }
+
+  static void clearScreen(){
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
+  }
+
+  static void sleep(int a){
+    try{
+	     Thread.sleep(a); // 1000ms = 1s
+    } catch(InterruptedException ex){
+	     System.exit(0);
+    }
+  }
+
 }
