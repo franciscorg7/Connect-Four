@@ -13,6 +13,8 @@ class FrontEnd{
   public static final String ANSI_WHITE = "\u001B[37m";
 
 
+
+
   static void title(){
     clearScreen();
     System.out.println(ANSI_YELLOW + "* CONNECT FOUR *" + ANSI_RESET);
@@ -39,5 +41,21 @@ class FrontEnd{
 	     System.exit(0);
     }
   }
+  static void DrawMenu(){
+  System.out.println("Well that was a hard draw,do you want to try again? ");
+            System.out.print (ANSI_CYAN+ "1)" + ANSI_RESET + "Yes    ");
+            System.out.println(ANSI_CYAN + "2)" + ANSI_RESET +  "No");
+          }
 
-}
+    static void LoseMenu(){
+  System.out.println("Ouch, but nice try ,do you want to try again? ");
+            System.out.print (ANSI_CYAN+ "1)" + ANSI_RESET + "Yes    ");
+            System.out.println(ANSI_CYAN + "2)" + ANSI_RESET  + "No");
+          }
+
+
+
+
+
+
+  }

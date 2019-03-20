@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Play{
-
+FrontEnd visuals = new FrontEnd();
   Grid grid;
   int depth; // Node depth in search tree
 
@@ -21,7 +21,8 @@ class Play{
      if(even(picker)) this.grid.config[grid.freeLine(col)][col] = 'X';
      else this.grid.config[grid.freeLine(col)][col] = 'O';
    }
-   else return;
+   else  System.out.println(visuals.ANSI_RED + "Collumn is full, you can't place there, please choose another collum " + visuals.ANSI_RESET) ; System.out.println();
+   return;
   }
 
 

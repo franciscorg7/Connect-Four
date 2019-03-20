@@ -1,7 +1,9 @@
 import java.util.*;
 
+
 class Grid{
 	char[][] config;
+		FrontEnd visuals = new FrontEnd();
 
   // To create empty grid
   Grid(){
@@ -26,16 +28,18 @@ class Grid{
 	}
 
 	// Print grid's configuration
-	static void showGrid(Grid grid){
+	 void showGrid(Grid grid){
 		System.out.println(" 0 1 2 3 4 5 6");
 		for(int i=0; i < 6; i++){
-			System.out.print('|');
+			System.out.print(visuals.ANSI_CYAN + '|' + visuals.ANSI_RESET);
 			for(int j=0; j < 7; j++){
-				System.out.print(grid.config[i][j]);
-				System.out.print('|');
+				System.out.print(visuals.ANSI_YELLOW + grid.config[i][j] + visuals.ANSI_RESET);
+				System.out.print(visuals.ANSI_CYAN + '|' + visuals.ANSI_RESET);
 			}
 			System.out.println();
+
 		}
+			System.out.println();
 	}
 
 	// Check if collumn is full
@@ -158,6 +162,7 @@ class Grid{
 					return 1; // Flag for CPU win
 				}
 			}
+
 		}
 
 		return -1; // Flag for no winner

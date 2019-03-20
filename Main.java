@@ -7,6 +7,7 @@ class Main{
     Grid grid = new Grid();
     Play play = new Play(grid);
     FrontEnd visuals = new FrontEnd();
+    boolean restart=true;
 
     visuals.title();
     visuals.sleep(1000);
@@ -19,6 +20,7 @@ class Main{
       System.out.println();
       System.out.println("First player: " + player.player1);
       System.out.println("Second player: " + player.player2);
+
 
       int picker=0;
       while(!grid.gridFull()){
@@ -39,6 +41,7 @@ class Main{
           return;
         }
 
+    System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
         int col = stdin.nextInt();
 
         visuals.clearScreen();
@@ -73,9 +76,11 @@ class Main{
               System.out.println("Player 2 wins");
             return;
           }
+
+
         return;
         }
-
+    System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
         int col = stdin.nextInt();
 
         visuals.clearScreen();
@@ -86,6 +91,8 @@ class Main{
         picker++;
       }
     }
+  }
+}
 
 
 /*
@@ -95,5 +102,3 @@ class Main{
     System.out.println(grid.freeLine(0));
     System.out.println(grid.gridFull());
 */
-  }
-}
