@@ -47,8 +47,8 @@ class FrontEnd{
             System.out.println(ANSI_CYAN + "2)" + ANSI_RESET +  "No");
           }
 
-    static void LoseMenu(){
-  System.out.println("Ouch, but nice try ,do you want to try again? ");
+    static void LoseWinMenu(){
+  System.out.println("do you want to try again? ");
             System.out.print (ANSI_CYAN+ "1)" + ANSI_RESET + "Yes    ");
             System.out.println(ANSI_CYAN + "2)" + ANSI_RESET  + "No");
           }
