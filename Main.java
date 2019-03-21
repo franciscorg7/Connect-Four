@@ -98,10 +98,6 @@ class Main{
       }
     }
 
-<<<<<<< HEAD
   } while (restart);
-=======
-
->>>>>>> 084e1c97f02b286a7b5e7e73525baea4c70f8b66
 }
 }
