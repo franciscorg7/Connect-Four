@@ -8,7 +8,6 @@ class Main{
     Play play = new Play(grid);
     FrontEnd visuals = new FrontEnd();
     boolean restart=true;
-do {
 
 
     visuals.title();
@@ -20,8 +19,8 @@ do {
     if(option == 1){
       Player player = new Player(1);
       System.out.println();
-      System.out.println("First player: " + player.player1);
-      System.out.println("Second player: " + player.player2);
+      System.out.println("Your Simbol:    " + player.player1);
+      System.out.println("Your Oponent's: " + player.player2);
 
 
       int picker=0;
@@ -33,15 +32,19 @@ do {
         if(winner != -1){
           switch(winner){
             case 0:
-              System.out.println("Player 1 wins");
+              System.out.println("You win, Congratulations");
             return;
 
             case 1:
-              System.out.println("Player 2 wins");
+              System.out.println("You lost");
             return;
           }
           return;
         }
+
+
+
+
 
     System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
         int col = stdin.nextInt();
@@ -59,8 +62,8 @@ do {
     else if(option == 2){
       Player player = new Player(2);
       System.out.println();
-      System.out.println("First player: " + player.player1);
-      System.out.println("Second player: " + player.player2);
+      System.out.println("Your Simbol:    " + player.player1);
+      System.out.println("Your Oponent's: " + player.player2);
 
       int picker=1;
       while(!grid.gridFull()){
@@ -71,11 +74,11 @@ do {
         if(winner != -1){
           switch(winner){
             case 0:
-              System.out.println("Player 1 wins");
+        System.out.println("You win, Congratulations");
             return;
 
             case 1:
-              System.out.println("Player 2 wins");
+              System.out.println("You lost");
             return;
           }
 
@@ -94,8 +97,7 @@ do {
       }
     }
 
-  }
-while (restart);
+
 }
 }
 
