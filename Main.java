@@ -8,8 +8,8 @@ class Main{
     Play play = new Play(grid);
     FrontEnd visuals = new FrontEnd();
     boolean restart=true;
-do {
 
+  do{
 
     visuals.title();
     visuals.sleep(1000);
@@ -50,6 +50,7 @@ do {
 
         play.makePlay(col, picker);
         grid.showGrid(grid);
+        System.out.println(play.utility(picker));
 
         picker++;
       }
@@ -79,7 +80,6 @@ do {
             return;
           }
 
-
         return;
         }
     System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
@@ -94,16 +94,6 @@ do {
       }
     }
 
-  }
-while (restart);
+  } while (restart);
 }
 }
-
-
-/*
-    // DEBUGGING
-    play.makePlay(4);
-    grid.showGrid(emptyGrid);
-    System.out.println(grid.freeLine(0));
-    System.out.println(grid.gridFull());
-*/
