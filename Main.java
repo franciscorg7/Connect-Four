@@ -43,10 +43,6 @@ class Main{
           return;
         }
 
-
-
-
-
     System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
         int col = stdin.nextInt();
 
