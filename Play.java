@@ -21,9 +21,11 @@ FrontEnd visuals = new FrontEnd();
      if(even(picker)) this.grid.config[grid.freeLine(col)][col] = 'X';
      else this.grid.config[grid.freeLine(col)][col] = 'O';
    }
-   else  System.out.println(visuals.ANSI_RED + "Collumn is full, you can't place there, please choose another collumn." + visuals.ANSI_RESET) ; System.out.println();
+   else  System.out.println(visuals.ANSI_RED + "Collumn is full, you can't place there, please choose another collum " + visuals.ANSI_RESET) ; System.out.println();
    return;
   }
+
+
 
   // Picker system auxiliar
   boolean even(int a){
