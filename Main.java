@@ -9,6 +9,7 @@ class Main{
     FrontEnd visuals = new FrontEnd();
     boolean restart=true;
 
+  do{
 
     visuals.title();
     visuals.sleep(1000);
@@ -53,6 +54,7 @@ class Main{
 
         play.makePlay(col, picker);
         grid.showGrid(grid);
+        System.out.println(play.utility(picker));
 
         picker++;
       }
@@ -82,7 +84,6 @@ class Main{
             return;
           }
 
-
         return;
         }
     System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
@@ -97,15 +98,10 @@ class Main{
       }
     }
 
+<<<<<<< HEAD
+  } while (restart);
+=======
 
+>>>>>>> 084e1c97f02b286a7b5e7e73525baea4c70f8b66
 }
 }
-
-
-/*
-    // DEBUGGING
-    play.makePlay(4);
-    grid.showGrid(emptyGrid);
-    System.out.println(grid.freeLine(0));
-    System.out.println(grid.gridFull());
-*/

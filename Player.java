@@ -1,6 +1,7 @@
 import java.util.*;
 
 class Player{
+
   char player1;
   char player2;
 
@@ -15,8 +16,8 @@ class Player{
       break;
 
       case 2:
-      player1 = 'O';
-      player2 = 'X';
+        player1 = 'O';
+        player2 = 'X';
       break;
     }
   }

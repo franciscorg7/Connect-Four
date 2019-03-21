@@ -165,6 +165,6 @@ class Grid{
 
 		}
 
-		return -1; // Flag for no winner
+		return -1; // Flag for no winner (DRAW)
 	}
 }
