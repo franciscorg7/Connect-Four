@@ -52,9 +52,4 @@ class FrontEnd{
             System.out.println(ANSI_CYAN + "2)" + ANSI_RESET  + "No");
           }
 
-
-
-
-
-
   }

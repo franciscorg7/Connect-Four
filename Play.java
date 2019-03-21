@@ -29,10 +29,9 @@ class Play{
      if(even(picker)) this.grid.config[grid.freeLine(col)][col] = 'X';
      else this.grid.config[grid.freeLine(col)][col] = 'O';
    }
-<<<<<<< HEAD
+   
    else  System.out.println(visuals.ANSI_RED + "Collumn is full, you can't place there, please choose another collum " + visuals.ANSI_RESET) ; System.out.println();
-=======
->>>>>>> 894513176f18333620c7013b2a8c42dc38bff7f6
+
    return;
   }
 
