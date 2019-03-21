@@ -8,6 +8,8 @@ class Main{
     Play play = new Play(grid);
     FrontEnd visuals = new FrontEnd();
     boolean restart=true;
+do {
+
 
     visuals.title();
     visuals.sleep(1000);
@@ -91,7 +93,10 @@ class Main{
         picker++;
       }
     }
+
   }
+while (restart);
+}
 }
 
 
