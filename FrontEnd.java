@@ -29,6 +29,13 @@ class FrontEnd{
   }
 
   static void firstPlayerMenu1(){
+    System.out.println(ANSI_CYAN +"WELCOME TO SINGLE PLAYER MODE , GOOD LUCK" + ANSI_RESET);
+    System.out.println();
+    sleep(2000);
+    System.out.println(ANSI_WHITE + "(Lets see if you can win)" + ANSI_RESET);
+
+    sleep(2000);
+    clearScreen();
     System.out.println("Who do you want to go first?");
     System.out.println();
     System.out.println(ANSI_CYAN + "1) " + ANSI_RESET + "Me");

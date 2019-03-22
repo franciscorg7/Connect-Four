@@ -62,11 +62,11 @@ public class Grid {
   public void showGrid(){
     System.out.println(visuals.ANSI_WHITE + " 0 1 2 3 4 5 6" + visuals.ANSI_RESET);
 		for(int i=0; i < 6; i++){
-			System.out.print(visuals.ANSI_BLUE + '|' + visuals.ANSI_RESET);
+		System.out.print(visuals.ANSI_CYAN + '|' + visuals.ANSI_RESET);
 			for(int j=0; j < 7; j++){
-        if(config[i][j] == '-') System.out.print(config[i][j]);
+        if(config[i][j] == '-') System.out.print(visuals.ANSI_YELLOW + config[i][j]+ visuals.ANSI_RESET);
 				else System.out.print(visuals.ANSI_YELLOW + config[i][j] + visuals.ANSI_RESET);
-				System.out.print(visuals.ANSI_BLUE + '|' + visuals.ANSI_RESET);
+		      System.out.print(visuals.ANSI_CYAN + '|' + visuals.ANSI_RESET);
 			}
 			System.out.println();
 		}
