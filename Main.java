@@ -1,99 +1,122 @@
 import java.util.*;
 
-class Main{
+public class Main{
 
-  public static void main(String[] args){
-    Scanner stdin = new Scanner(System.in);
-    Grid grid = new Grid();
-    Play play = new Play(grid);
+  static int currentPlayer = 0;
+
+  public static void main(String[] args) {
+    Scanner stdin=new Scanner (System.in);
     FrontEnd visuals = new FrontEnd();
-    boolean restart=true;
 
-  do{
+    int algorithm = 0;
 
     visuals.title();
     visuals.sleep(1000);
-    visuals.firstPlayerMenu();
-    int option = stdin.nextInt();
+    Grid jogo = new Grid();
 
-    // Human wants to go first
-    if(option == 1){
-      Player player = new Player(1);
-      System.out.println();
-      System.out.println("Your Simbol:    " + player.player1);
-      System.out.println("Your Oponent's: " + player.player2);
+    visuals.gameModeMenu();
+    int gameMode = stdin.nextInt(); // {Single or Multiplayer}
+    visuals.clearScreen();
 
+    if(gameMode == 1){ // Single Player Mode
+      visuals.firstPlayerMenu1();
+      int firstPlayer = stdin.nextInt();
+      visuals.clearScreen();
 
-      int picker=0;
-      while(!grid.gridFull()){
+      visuals.algorithmMenu();
+      algorithm = stdin.nextInt();
 
-        int winner = grid.winnerCheck();
-
-        // To check if there is any winner
-        if(winner != -1){
-          switch(winner){
-            case 0:
-              System.out.println("You win, Congratulations");
-            return;
-
-            case 1:
-              System.out.println("You lost");
-            return;
-          }
-          return;
-        }
-
-    System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
+      if(firstPlayer == 1){
+        visuals.clearScreen();
+        jogo.showGrid();
+        System.out.println();
+        System.out.print("Play: ");
         int col = stdin.nextInt();
+        jogo.makePlay(col, currentPlayer);
 
         visuals.clearScreen();
 
-        play.makePlay(col, picker);
-        grid.showGrid(grid);
-        System.out.println(play.utility(picker));
-
-        picker++;
+        jogo.showGrid();
+        proxjogador();
       }
+
+      else proxjogador();
     }
 
-    // CPU goes first
-    else if(option == 2){
-      Player player = new Player(2);
-      System.out.println();
-      System.out.println("Your Simbol:    " + player.player1);
-      System.out.println("Your Oponent's: " + player.player2);
+      Searches CPU = new Searches();
+      int op3 = 0;
 
-      int picker=1;
-      while(!grid.gridFull()){
+      // Game started, then enters loop (it only ends when the game ends)
+      while(jogo.winnerCheck()==0){
 
-        int winner = grid.winnerCheck();
+        long startTime = System.currentTimeMillis();
 
-        // To check if there is any winner
-        if(winner != -1){
-          switch(winner){
-            case 0:
-        System.out.println("You win, Congratulations");
-            return;
-
-            case 1:
-              System.out.println("You lost");
-            return;
+        // Single Player Mode
+        if(gameMode == 1){
+          if(currentPlayer==0) { // Player is playing
+            System.out.println();
+            System.out.print("Play: ");
+            op3 = stdin.nextInt();
+            jogo.makePlay(op3, currentPlayer);
+            visuals.clearScreen();
+            jogo.showGrid();
+            proxjogador();
           }
+          else{ // CPU is playing
+            Play inicial = new Play(jogo, currentPlayer);
+            Play play = null;
+            if(algorithm == 1) play = CPU.minimax(inicial,0, currentPlayer);
+            else play = CPU.alphaBeta(inicial, 0 ,currentPlayer, inicial.alpha, inicial.beta); //inicial.alpha?
 
-        return;
+            jogo.makePlay(play.col, currentPlayer); //col.col?
+            visuals.sleep(500);
+            visuals.clearScreen();
+            jogo.showGrid();
+            long endTime= (long)(System.currentTimeMillis());
+            System.out.println();
+            System.out.println(visuals.ANSI_GREEN + "GEEK STATISTICS: " + visuals.ANSI_RESET);
+            System.out.printf(" > CPU response time: %.3fs%n", (endTime - startTime) / 1000d);
+            System.out.println(" > Generated plays: " + play.genPlays);
+            play.genPlays=0; // Resets each play
+
+            proxjogador();
+          }
         }
-    System.out.print(visuals.ANSI_BLUE + "Please choose your move: " +visuals.ANSI_RESET);
-        int col = stdin.nextInt();
 
-        visuals.clearScreen();
+        // Multiplayer Mode
+        else{
+          jogo.showGrid();
+          System.out.println();
+          System.out.print("Play: "); op3 = stdin.nextInt();
+          jogo.makePlay(op3, currentPlayer);
+          System.out.println();
+          visuals.clearScreen();
+          proxjogador();
 
-        play.makePlay(col, picker);
-        grid.showGrid(grid);
+        }
 
-        picker++;
+        int winner = jogo.winnerCheck();
+        if(winner == 1){
+          if(gameMode == 1) System.out.println("You won (you were not suposed to)!");
+          else if(gameMode == 2) System.out.println("Player X won!");
+          break;
+        }
+
+        else if(winner == -1){
+          if(gameMode == 1) visuals.winnerCPU();
+          else if(gameMode == 2) System.out.println("Player O won!");
+          break;
+        }
+         else if(winner==-1)
+        System.out.println("Empate!");
       }
     }
 
-  } while (restart);
-}
-}
+    public static void proxjogador() {
+      if(currentPlayer==0)
+        currentPlayer=1;
+      else
+        currentPlayer=0;
+
+    }
+  }

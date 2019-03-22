@@ -1,182 +1,82 @@
 import java.util.*;
+import java.util.ArrayList;
 
-class Play{
-  FrontEnd visuals = new FrontEnd();
+public class Play{
 
-  Grid grid;
-  int depth; // Node depth in search tree
-  int currentPlayer;
+  public static int genPlays = 0;
+  private Grid grid;
+  private ArrayList<Play> sons;
+  int nextPlayer;
+  int col;
+  int score;
+  int alpha;
+  int beta;
 
-  Play(Grid grid){
-    this.grid = grid;
-    this.depth = depth;
+  public Play (Grid grid, int nextPlayer, int col){
+    this.grid = new Grid();
+    this.grid.copy(grid);
+    this.nextPlayer = nextPlayer;
+    this.col = col;
+    this.score = 0;
+    this.alpha = Integer.MIN_VALUE;
+    this.beta = Integer.MAX_VALUE;
+    sons = new ArrayList<Play>();
   }
 
-  // Receive place to drop piece and make a play
-  void makePlay(int col, int picker){
-   if(col < 0 || col > 6){
-     System.out.println("Input mismatch");
-     System.out.println();
-     return;
-   }
+  public Play (Grid grid, int nextPlayer){
+    this.grid=new Grid();
+    this.grid.copy(grid);
+    this.nextPlayer=nextPlayer;
+    this.col=0;
+    this.score = 0;
+    this.alpha=Integer.MIN_VALUE;
+    this.beta=Integer.MAX_VALUE;
+    sons = new ArrayList<Play>();
 
-   if(grid.colFull(col)){
-     System.out.println(visuals.ANSI_RED + "This collumn is full, you can't place there, please choose another collumn." + visuals.ANSI_RESET);
-     System.out.println();
-   }
-
-   if(!grid.colFull(col)){
-     if(even(picker)) this.grid.config[grid.freeLine(col)][col] = 'X';
-     else this.grid.config[grid.freeLine(col)][col] = 'O';
-   }
-   
-   else  System.out.println(visuals.ANSI_RED + "Collumn is full, you can't place there, please choose another collum " + visuals.ANSI_RESET) ; System.out.println();
-
-   return;
   }
 
+  public void getSons(){
+    Grid tmp = new Grid();
+    tmp.copy(grid);
+    for(int j = 0; j < 7; j++){
+      if(tmp.properPlay(j)){
+        tmp.copy(grid);
+        tmp.makePlay(j,nextPlayer);
 
-
-  // Picker system auxiliar
-  boolean even(int a){
-    if(a % 2 == 0) return true;
-    return false;
-  }
-
-  // Utility calculator
-  public int utility(int player){
-    return (linesUtility(player) + colUtility(player) + principalDiagUtility(player) + secondaryDiagUtility(player));
-  }
-
-  private int linesUtility(int currentPlayer){
-    int xCounter = 0;
-    int oCounter = 0;
-    int linesSum = 0;
-
-    for(int i=0; i < 6; i++){
-      for(int j=0; j < 4; j++){
-
-        if(grid.config[i][j] == 'X' || grid.config[i][j+1] == 'X' || grid.config[i][j+2] == 'X' || grid.config[i][j+3] == 'X'){
-          xCounter++;
+        if(nextPlayer==0) {
+          Play filho= new Play(tmp, 1,j);
+          sons.add(filho);
         }
-
-        if(grid.config[i][j] == 'O' || grid.config[i][j+1] == 'O' || grid.config[i][j+2] == 'O' || grid.config[i][j+3] == 'O'){
-          oCounter++;
+        else{
+          Play filho = new Play(tmp,0,j);
+          sons.add(filho);
         }
-
-        linesSum = linesSum + segmentEval(xCounter, oCounter);
-        xCounter = 0;
-        oCounter = 0;
       }
     }
-
-    int finalSum;
-    if(even(currentPlayer)) finalSum = linesSum + 16; // Rule for bonus
-    else finalSum = linesSum - 16; // Rule for bonus
-
-    return finalSum;
+    genPlays += sons.size(); // Each time a play generate children, generated plays get incremented by the number of sons
   }
 
-  private int colUtility(int currentPlayer){
-
-    int xCounter = 0;
-    int oCounter = 0;
-    int colsSum = 0;
-
-    for(int i=0; i < 3; i++){
-      for(int j=0; j < 7; j++){
-
-        if(grid.config[i][j] == 'X' || grid.config[i+1][j] == 'X' || grid.config[i+2][j] == 'X' || grid.config[i+3][j] == 'X'){
-          xCounter++;
-        }
-
-        if(grid.config[i][j] == 'O' || grid.config[i+1][j] == 'O' || grid.config[i+2][j] == 'O' || grid.config[i+3][j] == 'O'){
-          oCounter++;
-        }
-
-        colsSum += segmentEval(xCounter, oCounter);
-        xCounter = 0; oCounter = 0; // Resets each collumn
-      }
-    }
-
-    int finalSum;
-    if(even(currentPlayer)) finalSum = colsSum + 16;
-    else finalSum = colsSum - 16;
-
-    return finalSum;
+  public void copyNode(Play x){
+    this.grid.copy(x.grid);
+    this.sons = x.sons; //faz sons adiciona a sons (ArrayList)
+    this.nextPlayer=x.nextPlayer;
+    this.col=x.col;
+    this.score=x.score;
+    this.alpha=x.alpha;
+    this.beta=x.beta;
   }
 
-  private int principalDiagUtility(int currentPlayer){
-    int xCounter = 0;
-    int oCounter = 0;
-    int diagonalSum = 0;
 
-    for(int i=3; i < 6; i++){
-      for(int j=0; j < 4; j++){
-
-        if(grid.config[i][j] == 'X' || grid.config[i-1][j+1] == 'X' || grid.config[i-2][j+2] == 'X' || grid.config[i-3][j+3] == 'X'){
-          xCounter++;
-        }
-
-        if(grid.config[i][j] == 'O' || grid.config[i-1][j+1] == 'O' || grid.config[i-2][j+2] == 'O' || grid.config[i-3][j+3] == 'O'){
-          oCounter++;
-        }
-
-        diagonalSum += segmentEval(xCounter, oCounter);
-        xCounter = 0; oCounter = 0;
-      }
-    }
-
-    int finalSum;
-    if(even(currentPlayer)) finalSum = diagonalSum + 16;
-    else finalSum = diagonalSum - 16;
-
-    return finalSum;
+  public Grid getBoardState() {
+    return grid;
   }
 
-  private int secondaryDiagUtility(int currentPlayer){
-    int xCounter = 0;
-    int oCounter = 0;
-    int diagonalSum = 0;
-
-    for(int i=3; i < 6; i++){
-      for(int j=6; j > 2; j--){
-
-        if(grid.config[i][j] == 'X' || grid.config[i-1][j-1] == 'X' || grid.config[i-2][j-2] == 'X' || grid.config[i-3][j-3] == 'X'){
-          xCounter++;
-        }
-
-        if(grid.config[i][j] == 'O' || grid.config[i-1][j-1] == 'O' || grid.config[i-2][j-2] == 'O' || grid.config[i-3][j-3] == 'O'){
-          oCounter++;
-        }
-
-        diagonalSum += segmentEval(xCounter, oCounter);
-        xCounter = 0; oCounter = 0;
-      }
-    }
-
-    int finalSum;
-    if(even(currentPlayer)) finalSum = diagonalSum + 16;
-    else finalSum = diagonalSum - 16;
-
-    return finalSum;
+  public ArrayList<Play> getfilhos() {
+    return sons;
   }
 
-  private int segmentEval(int xCounter, int oCounter){
 
-    // Segments with no O's
-    if(xCounter == 1 && oCounter == 0) return 1;
-    if(xCounter == 2 && oCounter == 0) return 10;
-    if(xCounter == 3 && oCounter == 0) return 50;
-    if(xCounter == 4 && oCounter == 0) return 512;
 
-    // Segments with no X's
-    if(xCounter == 0 && oCounter == 1) return -1;
-    if(xCounter == 0 && oCounter == 2) return -10;
-    if(xCounter == 0 && oCounter == 3) return -50;
-    if(xCounter == 0 && oCounter == 4) return -512;
 
-    // Empty or mixed segments
-    else return 0;
-  }
+
 }

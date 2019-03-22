@@ -1,116 +1,170 @@
 import java.util.*;
 
-class MinimaxAI {
+public class Searches{
 
-    //Variable that holds the maximum depth the MiniMax algorithm will reach for this player
-    private int maxDepth;
-    //Variable that holds which letter this player controls
-    private int playerLetter;
+  //fazer para user dar profundidade máxima
+  int maxDepth=5;
 
-    public int getMaxDepth() {
-        return maxDepth;
+  public Play alphaBeta(Play node, int depth, int currentPlayer,int alpha,int beta){ //Decisao
+    int v;
+    if(node.getBoardState().winnerCheck() != 0 || depth == maxDepth){
+      node.score=node.getBoardState().utility(currentPlayer);
+      return node;
     }
 
-    public void setMaxDepth(int maxDepth) {
-        this.maxDepth = maxDepth;
+    else if(currentPlayer == 0){ //PC turn
+      v = alphaBetaMaxfunction(node, currentPlayer, depth,alpha,beta).score;
+      node.score = v;
+      return node;
     }
 
-    public int getPlayerLetter() {
-        return playerLetter;
+    else{ //MY turn
+      v = alphaBetaMinfunction(node, currentPlayer, depth,alpha,beta).score;
+      node.score = v;
+      return node;
+    }
+  }
+
+  private Play alphaBetaMaxfunction(Play node,int currentPlayer, int depth,int alpha,int beta){
+    int v = Integer.MIN_VALUE;
+    int best = Integer.MIN_VALUE;
+    int col = 0;
+    node.beta=beta;
+    node.getSons();
+    if(currentPlayer==1)
+    currentPlayer=0;
+    else{
+      currentPlayer=1;
+    }
+    for(Play w : node.getfilhos()){
+      Play tmp = new Play(w.getBoardState(),currentPlayer);
+      tmp.copyNode(alphaBeta(w,depth+1, currentPlayer,node.alpha,node.beta));
+      v = Math.max(v,tmp.score);
+      if(v>best){
+        best = v;
+        col = tmp.col;
+      }
+      if(v >= node.beta){
+        node.score=v;
+        return node;
+      }
+      alpha=Math.max(alpha,v);
+    }
+    node.score=v;
+    if(depth==0)
+    node.col=col;
+    return node;
+  }
+
+  private Play alphaBetaMinfunction(Play node, int currentPlayer,int depth, int alpha,int beta) {
+    int v = Integer.MAX_VALUE;
+    int best = Integer.MAX_VALUE;
+    int col = 0;
+    node.alpha=alpha;
+    node.getSons();
+    if (currentPlayer == 1)
+    currentPlayer = 0;
+    else {
+      currentPlayer = 1;
+    }
+    for (Play w : node.getfilhos()) {
+      Play tmp = new Play(w.getBoardState(),currentPlayer);
+      tmp.copyNode(alphaBeta(w,depth+1, currentPlayer,alpha,beta));
+      v = Math.min(v, tmp.score);
+      if(v<best){
+        best = v;
+        col = tmp.col;
+      }
+      if(v <= node.alpha){
+
+        node.score=v;
+        return node;
+
+      }
+      beta=Math.min(beta,v);
+
+    }
+    node.score=v;
+    if(depth==0)
+    node.col=col;
+    return node;
+  }
+
+  //MINIMAX ---------------------------------------------------------------------------------------
+
+  public Play minimax(Play node, int depth, int currentPlayer){
+    int v;
+    if(node.getBoardState().winnerCheck() != 0 || depth == maxDepth){ //Decisao
+      node.score=node.getBoardState().utility(currentPlayer);
+      return node;
+    }
+    else if(currentPlayer == 0){ //PC
+      v = maxfunction(node, currentPlayer, depth).score;
+      node.score = v;
+      return node;
     }
 
-    public void setPlayerLetter(int playerLetter) {
-        this.playerLetter = playerLetter;
+    else{ //MY turn
+      v = minfunction(node, currentPlayer, depth).score;
+      node.score = v;
+      return node;
+    }
+  }
+
+  private Play maxfunction(Play node,int currentPlayer, int depth){
+    int v = Integer.MIN_VALUE;
+    int best = Integer.MIN_VALUE;
+    int col = 0;
+
+    node.getSons();
+    if(currentPlayer==1) //muda o jogador
+     currentPlayer=0;
+    else{
+      currentPlayer=1;
     }
 
-    public MinimaxAI() {
-        maxDepth = 4;
-        playerLetter = Board.X;
+    for(Play w : node.getfilhos()){
+      Play tmp = new Play(w.getBoardState(),currentPlayer);
+      tmp.copyNode(minimax(w,depth+1, currentPlayer));
+      v = Math.max(v,tmp.score);
+      if(v>best){
+        best = v;
+        col = tmp.col;
+      }
     }
+    node.score=v;
+    if(depth==0)
+    node.col=col;
+    return node;
+  }
 
-    public MinimaxAI(int maxDepth, int playerLetter) {
-        this.maxDepth = maxDepth;
-        this.playerLetter = playerLetter;
+  private Play minfunction(Play node, int currentPlayer,int depth) {
+    int v = Integer.MAX_VALUE;
+    int best = Integer.MAX_VALUE;
+    int col = 0;
+
+    node.getSons();
+
+    if(currentPlayer==1)
+    currentPlayer=0;
+    else{
+      currentPlayer=1;
     }
+    for (Play w : node.getfilhos()) {
+      Play tmp = new Play(w.getBoardState(),currentPlayer);
+      tmp.copyNode(minimax(w,depth+1, currentPlayer));
+      v = Math.min(v, tmp.score);
+      if(v<best){
+        best = v;
+        col = tmp.col;
+      }
 
-    //Initiates the MiniMax algorithm
-    public Move MiniMax(Board board) {
-        //If the X plays then it wants to MAXimize the heuristics value
-        if (playerLetter == Board.X) {
-            return max(new Board(board), 0);
-        }
-        //If the O plays then it wants to MINimize the heuristics value
-        else {
-            return min(new Board(board), 0);
-        }
     }
+    node.score=v;
+    if(depth==0)
+    node.col=col;
+    return node;
+  }
 
-    // The max and min functions are called interchangingly, one after another until a max depth is reached
-    public Move max(Board board, int depth) {
-        Random r = new Random();
 
-        /* If MAX is called on a state that is terminal or after a maximum depth is reached,
-         * then a heuristic is calculated on the state and the move returned.
-         */
-        if((board.checkGameOver()) || (depth == maxDepth))
-        {
-            Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
-            return lastMove;
-        }
-        //The children-moves of the state are calculated
-        ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.X));
-        Move maxMove = new Move(Integer.MIN_VALUE);
-        for (Board child : children) {
-            //And for each child min is called, on a lower depth
-            Move move = min(child, depth + 1);
-            //The child-move with the greatest value is selected and returned by max
-            if(move.getValue() >= maxMove.getValue()) {
-                if ((move.getValue() == maxMove.getValue())) {
-                    //If the heuristic has the same value then we randomly choose one of the two moves
-                    if (r.nextInt(2) == 0) {
-                        maxMove.setRow(child.getLastMove().getRow());
-                        maxMove.setCol(child.getLastMove().getCol());
-                        maxMove.setValue(move.getValue());
-                    }
-                }
-                else {
-                    maxMove.setRow(child.getLastMove().getRow());
-                    maxMove.setCol(child.getLastMove().getCol());
-                    maxMove.setValue(move.getValue());
-                }
-            }
-        }
-        return maxMove;
-    }
-
-    //Min works similarly to max
-    public Move min(Board board, int depth) {
-        Random r = new Random();
-
-        if((board.checkGameOver()) || (depth == maxDepth)) {
-            Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
-            return lastMove;
-        }
-        ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.O));
-        Move minMove = new Move(Integer.MAX_VALUE);
-        for (Board child : children) {
-            Move move = max(child, depth + 1);
-            if(move.getValue() <= minMove.getValue()) {
-                if ((move.getValue() == minMove.getValue())) {
-                    if (r.nextInt(2) == 0) {
-                        minMove.setRow(child.getLastMove().getRow());
-                        minMove.setCol(child.getLastMove().getCol());
-                        minMove.setValue(move.getValue());
-                    }
-                }
-                else {
-                        minMove.setRow(child.getLastMove().getRow());
-                        minMove.setCol(child.getLastMove().getCol());
-                        minMove.setValue(move.getValue());
-                }
-            }
-        }
-        return minMove;
-    }
-
- }
+}

@@ -19,12 +19,44 @@ class FrontEnd{
     System.out.println();
   }
 
-  static void firstPlayerMenu(){
+  static void gameModeMenu(){
+    System.out.println("SELECT GAMEMODE");
+    System.out.println();
+    System.out.println(ANSI_CYAN + "1) " + ANSI_RESET + "Single Player");
+    System.out.println(ANSI_CYAN + "2) " + ANSI_RESET + "Multiplayer");
+    System.out.println();
+    System.out.print("Option: ");
+  }
+
+  static void firstPlayerMenu1(){
     System.out.println("Who do you want to go first?");
+    System.out.println();
     System.out.println(ANSI_CYAN + "1) " + ANSI_RESET + "Me");
     System.out.println(ANSI_CYAN + "2) " + ANSI_RESET + "CPU");
     System.out.println();
     System.out.print("Option: ");
+  }
+
+  static void firstPlayerMenu2(){
+    System.out.println("Who do you want to go first?");
+    System.out.println();
+    System.out.println(ANSI_CYAN + "1) " + ANSI_RESET + "Player 1 (X)");
+    System.out.println(ANSI_CYAN + "2) " + ANSI_RESET + "Player 2 (O)");
+    System.out.println();
+    System.out.print("Option: ");
+  }
+
+  static void algorithmMenu(){
+    System.out.println("Choose the algorithm you want CPU to run:");
+    System.out.println();
+    System.out.println(ANSI_CYAN + "1) " + ANSI_RESET + "MiniMax");
+    System.out.println(ANSI_CYAN + "2) " + ANSI_RESET + "Alpha-Beta");
+    System.out.println();
+    System.out.print("Option: ");
+  }
+
+  static void winnerCPU(){
+    System.out.println("CPU won (predictable)!");
   }
 
   static void clearScreen(){
@@ -40,16 +72,4 @@ class FrontEnd{
     }
   }
 
-  static void DrawMenu(){
-    System.out.println("Well that was a hard draw,do you want to try again? ");
-    System.out.print (ANSI_CYAN+ "1)" + ANSI_RESET + "Yes    ");
-    System.out.println(ANSI_CYAN + "2)" + ANSI_RESET +  "No");
-  }
-
-    static void LoseWinMenu(){
-  System.out.println("do you want to try again? ");
-            System.out.print (ANSI_CYAN+ "1)" + ANSI_RESET + "Yes    ");
-            System.out.println(ANSI_CYAN + "2)" + ANSI_RESET  + "No");
-          }
-
-  }
+}
