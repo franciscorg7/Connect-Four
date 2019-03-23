@@ -4,11 +4,11 @@ import java.util.ArrayList;
 public class Play{
 
   public static int genPlays = 0;
-  private Grid grid;
-  private ArrayList<Play> sons;
+  public Grid grid;
+  public ArrayList<Play> sons;
   int nextPlayer;
   int col;
-  int score;
+  int value;
   int alpha;
   int beta;
 
@@ -17,7 +17,7 @@ public class Play{
     this.grid.copy(grid);
     this.nextPlayer = nextPlayer;
     this.col = col;
-    this.score = 0;
+    this.value = 0;
     this.alpha = Integer.MIN_VALUE;
     this.beta = Integer.MAX_VALUE;
     sons = new ArrayList<Play>();
@@ -28,7 +28,7 @@ public class Play{
     this.grid.copy(grid);
     this.nextPlayer=nextPlayer;
     this.col=0;
-    this.score = 0;
+    this.value = 0;
     this.alpha=Integer.MIN_VALUE;
     this.beta=Integer.MAX_VALUE;
     sons = new ArrayList<Play>();
@@ -36,19 +36,19 @@ public class Play{
   }
 
   public void getSons(){
-    Grid tmp = new Grid();
-    tmp.copy(grid);
+    Grid aux = new Grid();
+    aux.copy(grid);
     for(int j = 0; j < 7; j++){
-      if(tmp.properPlay(j)){
-        tmp.copy(grid);
-        tmp.makePlay(j,nextPlayer);
+      if(aux.properPlay(j)){
+        aux.copy(grid);
+        aux.makePlay(j,nextPlayer);
 
         if(nextPlayer==0) {
-          Play filho= new Play(tmp, 1,j);
+          Play filho= new Play(aux, 1,j);
           sons.add(filho);
         }
         else{
-          Play filho = new Play(tmp,0,j);
+          Play filho = new Play(aux,0,j);
           sons.add(filho);
         }
       }
@@ -56,27 +56,18 @@ public class Play{
     genPlays += sons.size(); // Each time a play generate children, generated plays get incremented by the number of sons
   }
 
-  public void copyNode(Play x){
+  public void copyPlay(Play x){
     this.grid.copy(x.grid);
     this.sons = x.sons; //faz sons adiciona a sons (ArrayList)
     this.nextPlayer=x.nextPlayer;
     this.col=x.col;
-    this.score=x.score;
+    this.value=x.value;
     this.alpha=x.alpha;
     this.beta=x.beta;
   }
 
-
-  public Grid getBoardState() {
-    return grid;
+  public static int proxjogador(int currentPlayer){
+    if(currentPlayer==0) return 1;
+    else return 0;
   }
-
-  public ArrayList<Play> getfilhos() {
-    return sons;
-  }
-
-
-
-
-
 }

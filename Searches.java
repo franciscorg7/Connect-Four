@@ -2,169 +2,165 @@ import java.util.*;
 
 public class Searches{
 
-  //fazer para user dar profundidade máxima
+  // Closer to 7, harder to defeat CPU mind
   int maxDepth=5;
 
-  public Play alphaBeta(Play node, int depth, int currentPlayer,int alpha,int beta){ //Decisao
-    int v;
-    if(node.getBoardState().winnerCheck() != 0 || depth == maxDepth){
-      node.score=node.getBoardState().utility(currentPlayer);
-      return node;
+  public Play alphaBeta(Play play, int depth, int currentPlayer,int alpha,int beta){ //Decisao
+    int currentValue;
+    if(play.grid.winnerCheck() != 0 || depth == maxDepth){
+      play.value=play.grid.utility(currentPlayer);
+      return play;
     }
 
     else if(currentPlayer == 0){ //PC turn
-      v = alphaBetaMaxfunction(node, currentPlayer, depth,alpha,beta).score;
-      node.score = v;
-      return node;
+      currentValue = alphaBetaMaxfunction(play, currentPlayer, depth,alpha,beta).value;
+      play.value = currentValue;
+      return play;
     }
 
     else{ //MY turn
-      v = alphaBetaMinfunction(node, currentPlayer, depth,alpha,beta).score;
-      node.score = v;
-      return node;
+      currentValue = alphaBetaMinfunction(play, currentPlayer, depth,alpha,beta).value;
+      play.value = currentValue;
+      return play;
     }
   }
 
-  private Play alphaBetaMaxfunction(Play node,int currentPlayer, int depth,int alpha,int beta){
-    int v = Integer.MIN_VALUE;
+  private Play alphaBetaMaxfunction(Play play,int currentPlayer, int depth,int alpha,int beta){
+    int currentValue = Integer.MIN_VALUE;
     int best = Integer.MIN_VALUE;
     int col = 0;
-    node.beta=beta;
-    node.getSons();
+    play.beta=beta;
+    play.getSons();
     if(currentPlayer==1)
     currentPlayer=0;
     else{
       currentPlayer=1;
     }
-    for(Play w : node.getfilhos()){
-      Play tmp = new Play(w.getBoardState(),currentPlayer);
-      tmp.copyNode(alphaBeta(w,depth+1, currentPlayer,node.alpha,node.beta));
-      v = Math.max(v,tmp.score);
-      if(v>best){
-        best = v;
-        col = tmp.col;
+    for(Play w : play.sons){
+      Play aux = new Play(w.grid,currentPlayer);
+      aux.copyPlay(alphaBeta(w,depth+1, currentPlayer,play.alpha,play.beta));
+      currentValue = Math.max(currentValue,aux.value);
+      if(currentValue>best){
+        best = currentValue;
+        col = aux.col;
       }
-      if(v >= node.beta){
-        node.score=v;
-        return node;
+      if(currentValue >= play.beta){
+        play.value=currentValue;
+        return play;
       }
-      alpha=Math.max(alpha,v);
+      alpha=Math.max(alpha,currentValue);
     }
-    node.score=v;
+    play.value=currentValue;
     if(depth==0)
-    node.col=col;
-    return node;
+    play.col=col;
+    return play;
   }
 
-  private Play alphaBetaMinfunction(Play node, int currentPlayer,int depth, int alpha,int beta) {
-    int v = Integer.MAX_VALUE;
+  private Play alphaBetaMinfunction(Play play, int currentPlayer,int depth, int alpha,int beta) {
+    int currentValue = Integer.MAX_VALUE;
     int best = Integer.MAX_VALUE;
     int col = 0;
-    node.alpha=alpha;
-    node.getSons();
+    play.alpha=alpha;
+    play.getSons();
     if (currentPlayer == 1)
     currentPlayer = 0;
     else {
       currentPlayer = 1;
     }
-    for (Play w : node.getfilhos()) {
-      Play tmp = new Play(w.getBoardState(),currentPlayer);
-      tmp.copyNode(alphaBeta(w,depth+1, currentPlayer,alpha,beta));
-      v = Math.min(v, tmp.score);
-      if(v<best){
-        best = v;
-        col = tmp.col;
+    for (Play w : play.sons) {
+      Play aux = new Play(w.grid,currentPlayer);
+      aux.copyPlay(alphaBeta(w,depth+1, currentPlayer,alpha,beta));
+      currentValue = Math.min(currentValue, aux.value);
+      if(currentValue<best){
+        best = currentValue;
+        col = aux.col;
       }
-      if(v <= node.alpha){
+      if(currentValue <= play.alpha){
 
-        node.score=v;
-        return node;
+        play.value=currentValue;
+        return play;
 
       }
-      beta=Math.min(beta,v);
+      beta=Math.min(beta,currentValue);
 
     }
-    node.score=v;
+    play.value=currentValue;
     if(depth==0)
-    node.col=col;
-    return node;
+    play.col=col;
+    return play;
   }
 
-  //MINIMAX ---------------------------------------------------------------------------------------
 
-  public Play minimax(Play node, int depth, int currentPlayer){
-    int v;
-    if(node.getBoardState().winnerCheck() != 0 || depth == maxDepth){ //Decisao
-      node.score=node.getBoardState().utility(currentPlayer);
-      return node;
-    }
-    else if(currentPlayer == 0){ //PC
-      v = maxfunction(node, currentPlayer, depth).score;
-      node.score = v;
-      return node;
+  public Play minimax(Play play, int depth, int currentPlayer){
+    int currentValue;
+
+    // Algorithm stops running when someone wins or search reaches maxDepth
+    if(play.grid.winnerCheck() != 0 || depth == maxDepth){
+      play.value = play.grid.utility(currentPlayer);
+      return play;
     }
 
-    else{ //MY turn
-      v = minfunction(node, currentPlayer, depth).score;
-      node.score = v;
-      return node;
+    else if(currentPlayer == 1){ // Flag for Player depth field
+      currentValue = minfunction(play, depth, play.proxjogador(currentPlayer)).value;
+      play.value = currentValue;
+      return play;
+    }
+
+    else{ // Flag for CPU depth field
+      currentValue = maxfunction(play, depth, play.proxjogador(currentPlayer)).value;
+      play.value = currentValue;
+      return play;
     }
   }
 
-  private Play maxfunction(Play node,int currentPlayer, int depth){
-    int v = Integer.MIN_VALUE;
-    int best = Integer.MIN_VALUE;
+  private Play minfunction(Play play, int depth, int currentPlayer) {
+    int currentValue = Integer.MAX_VALUE;
+    int min = Integer.MAX_VALUE;
     int col = 0;
 
-    node.getSons();
-    if(currentPlayer==1) //muda o jogador
-     currentPlayer=0;
-    else{
-      currentPlayer=1;
-    }
+    play.getSons();
 
-    for(Play w : node.getfilhos()){
-      Play tmp = new Play(w.getBoardState(),currentPlayer);
-      tmp.copyNode(minimax(w,depth+1, currentPlayer));
-      v = Math.max(v,tmp.score);
-      if(v>best){
-        best = v;
-        col = tmp.col;
+    for (Play w : play.sons){
+      Play aux = new Play(w.grid, currentPlayer);
+
+      aux.copyPlay(minimax(w,depth+1, currentPlayer));
+      currentValue = Math.min(currentValue, aux.value);
+
+      if(currentValue < min){
+        min = currentValue;
+        col = aux.col;
       }
     }
-    node.score=v;
-    if(depth==0)
-    node.col=col;
-    return node;
+
+    play.value = currentValue;
+
+    if(depth==0) play.col=col;
+
+    return play;
   }
 
-  private Play minfunction(Play node, int currentPlayer,int depth) {
-    int v = Integer.MAX_VALUE;
-    int best = Integer.MAX_VALUE;
+  private Play maxfunction(Play play, int depth, int currentPlayer){
+    int currentValue = Integer.MIN_VALUE;
+    int max = Integer.MIN_VALUE;
     int col = 0;
 
-    node.getSons();
+    play.getSons();
 
-    if(currentPlayer==1)
-    currentPlayer=0;
-    else{
-      currentPlayer=1;
-    }
-    for (Play w : node.getfilhos()) {
-      Play tmp = new Play(w.getBoardState(),currentPlayer);
-      tmp.copyNode(minimax(w,depth+1, currentPlayer));
-      v = Math.min(v, tmp.score);
-      if(v<best){
-        best = v;
-        col = tmp.col;
+    for(Play w : play.sons){
+      Play aux = new Play(w.grid, currentPlayer);
+      aux.copyPlay(minimax(w,depth+1, currentPlayer));
+      currentValue = Math.max(currentValue, aux.value);
+
+      if(currentValue > max){
+        max = currentValue;
+        col = aux.col;
       }
-
     }
-    node.score=v;
-    if(depth==0)
-    node.col=col;
-    return node;
+
+    play.value = currentValue;
+
+    if(depth == 0) play.col = col;
+
+    return play;
   }
-
-
 }
