@@ -63,13 +63,20 @@ class FrontEnd{
   }
 
   static void winnerCPU(){
-    System.out.println("CPU won (predictable)!");
+    System.out.println();
+    System.out.println(ANSI_CYAN + "CPU WON(predictable)!" + ANSI_RESET);
   }
 
   static void clearScreen(){
     System.out.print("\033[H\033[2J");
     System.out.flush();
   }
+  static void restart(){
+  System.out.println( "Do you want to try again?" );
+            System.out.print (ANSI_CYAN+ "1)" + ANSI_RESET + "Yes    ");
+            System.out.println(ANSI_CYAN + "2)" + ANSI_RESET  + "No");
+
+          }
 
   static void sleep(int a){
     try{

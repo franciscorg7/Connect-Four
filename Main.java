@@ -7,7 +7,8 @@ public class Main{
   public static void main(String[] args) {
     Scanner stdin=new Scanner (System.in);
     FrontEnd visuals = new FrontEnd();
-
+    boolean restart = true;
+    while(restart){
     int algorithm = 0;
 
     visuals.title();
@@ -103,7 +104,17 @@ public class Main{
         }
 
         else if(winner == -1){
-          if(gameMode == 1) visuals.winnerCPU();
+          if(gameMode == 1){
+           visuals.winnerCPU();
+           System.out.println();
+           visuals.sleep(2000);
+           visuals.restart();
+           int option1= stdin.nextInt();
+           if(option1==1) restart=true;
+
+           else if(option1==2) restart=false;
+
+           }
           else if(gameMode == 2) System.out.println("Player O won!");
           break;
         }
@@ -111,6 +122,7 @@ public class Main{
         System.out.println("Empate!");
       }
     }
+  }
 
     public static void proxjogador() {
       if(currentPlayer==0)
