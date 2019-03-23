@@ -112,11 +112,10 @@ public class Main{
       }
     }
 
-    public static void proxjogador() {
+    public static void proxjogador(){
       if(currentPlayer==0)
         currentPlayer=1;
       else
         currentPlayer=0;
-
     }
   }

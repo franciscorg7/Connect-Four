@@ -64,7 +64,7 @@ public class Grid {
 		for(int i=0; i < 6; i++){
 		System.out.print(visuals.ANSI_CYAN + '|' + visuals.ANSI_RESET);
 			for(int j=0; j < 7; j++){
-        if(config[i][j] == '-') System.out.print(visuals.ANSI_YELLOW + config[i][j]+ visuals.ANSI_RESET);
+        if(config[i][j] == '-') System.out.print(visuals.ANSI_WHITE + config[i][j]+ visuals.ANSI_RESET);
 				else System.out.print(visuals.ANSI_YELLOW + config[i][j] + visuals.ANSI_RESET);
 		      System.out.print(visuals.ANSI_CYAN + '|' + visuals.ANSI_RESET);
 			}
