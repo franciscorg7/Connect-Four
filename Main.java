@@ -16,7 +16,7 @@ public class Main{
 
     visuals.title();
     visuals.sleep(1000);
-    Grid jogo = new Grid();
+    Grid grid = new Grid();
 
     visuals.gameModeMenu();
     int gameMode = stdin.nextInt(); // {Single or Multiplayer}
@@ -59,25 +59,25 @@ public class Main{
 
       if(firstPlayer == 1){
         visuals.clearScreen();
-        jogo.showGrid();
+        grid.showGrid();
         System.out.println();
         System.out.print("Play: ");
         int col = stdin.nextInt();
-        jogo.makePlay(col, currentPlayer);
+        grid.makePlay(col, currentPlayer);
 
         visuals.clearScreen();
 
-        jogo.showGrid();
+        grid.showGrid();
         proxjogador();
       }
 
       else proxjogador();
     }
 
-      int op3 = 0;
+      int col = 0;
 
       // Game started, then enters loop (it only ends when the game ends)
-      while(jogo.winnerCheck() == 0){
+      while(grid.winnerCheck() == 0){
 
         long startTime = System.currentTimeMillis();
 
@@ -86,29 +86,29 @@ public class Main{
           if(currentPlayer==0) { // Player is playing
             System.out.println();
             System.out.print("Play: ");
-            op3 = stdin.nextInt();
-            jogo.makePlay(op3, currentPlayer);
+            col = stdin.nextInt();
+            grid.makePlay(col, currentPlayer);
             visuals.clearScreen();
-            jogo.showGrid();
+            grid.showGrid();
             proxjogador();
           }
 
           else{ // CPU is playing
-            Play inicial = new Play(jogo, currentPlayer);
+            Play root = new Play(grid, currentPlayer);
             Play play = null;
-            if(algorithm == 1) play = CPU.minimax(inicial,0, currentPlayer);
-            else play = CPU.alphaBeta(inicial, 0 ,currentPlayer, inicial.alpha, inicial.beta); //inicial.alpha?
+            if(algorithm == 1) play = CPU.minimax(root, 0, currentPlayer);
+            else play = CPU.alphaBeta(root, 0, currentPlayer, root.alpha, root.beta);
 
-            jogo.makePlay(play.col, currentPlayer); //col.col?
+            grid.makePlay(play.col, currentPlayer);
             visuals.sleep(500);
             visuals.clearScreen();
-            jogo.showGrid();
+            grid.showGrid();
             long endTime= (long)(System.currentTimeMillis());
             System.out.println();
             System.out.println(visuals.ANSI_GREEN + "GEEK STATISTICS: " + visuals.ANSI_RESET);
             System.out.printf(" > CPU response time: %.3fs%n", (endTime - startTime) / 1000d);
             System.out.println(" > Generated plays: " + play.genPlays);
-            play.genPlays=0; // Resets each play
+            play.genPlays = 0; // Resets each play
 
             proxjogador();
           }
@@ -116,40 +116,41 @@ public class Main{
 
         // Multiplayer Mode
         else{
-          jogo.showGrid();
+          grid.showGrid();
           System.out.println();
-          System.out.print("Play: "); op3 = stdin.nextInt();
-          jogo.makePlay(op3, currentPlayer);
+          System.out.print("Play: "); col = stdin.nextInt();
+          grid.makePlay(col, currentPlayer);
           System.out.println();
           visuals.clearScreen();
           proxjogador();
 
         }
 
-        int winner = jogo.winnerCheck();
+        int winner = grid.winnerCheck();
         if(winner == 1){
           if(gameMode == 1) System.out.println("You won (you were not suposed to)!");
           else if(gameMode == 2) System.out.println("Player X won!");
           break;
         }
 
+        // CPU or Player2 won
         else if(winner == -1){
           if(gameMode == 1){
            visuals.winnerCPU();
            System.out.println();
-           visuals.sleep(2000);
+           visuals.sleep(1000);
            visuals.restart();
-           int option1= stdin.nextInt();
-           if(option1 == 1) restart = true;
 
-           else if(option1 == 2) restart = false;
+           int restartOption = stdin.nextInt();
 
+           if(restartOption == 1) restart = true;
+           else if(restartOption == 2) restart = false;
            }
+
           else if(gameMode == 2) System.out.println("Player O won!");
           break;
         }
-         else if(winner==-1)
-        System.out.println("Empate!");
+         else if(grid.gridFull()) System.out.println("Empate!");
       }
     }
   }

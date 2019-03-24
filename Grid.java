@@ -40,22 +40,22 @@ public class Grid {
   }
 
   // Make a play and updates grid
-  public void makePlay(int col, int picker){
+  public int makePlay(int col, int nextPlayer){
     if((col < 0 || col > 6) || colFull(col)) {
-      System.out.println("Coluna inválida");
-      System.out.println("Devias estar atento.. O adversário substitui-te!!");
+      System.out.println("Invalid play");
       System.out.println();
-      return;
+      return -1;
     }
 
-    switch(picker){
+    switch(nextPlayer){
 
       case 0: this.config[freeLine(col)][col] = 'X';
-      return;
+      return 1;
 
       case 1: this.config[freeLine(col)][col] = 'O';
-      return;
+      return 1;
     }
+    return 1;
   }
 
   // To print grid configuration
@@ -171,12 +171,12 @@ public class Grid {
 
 		}
 
-		return 0; // Flag for no winner (DRAW)
+		return 0; // Flag for no winner
 	}
 
-  public boolean properPlay(int coluna){
-    if((coluna <0 || coluna > 6) || (config[0][coluna]!='-'))
-    return false;
+  // Check if play is valid
+  public boolean properPlay(int col){
+    if((col < 0 || col > 6) || colFull(col)) return false;
 
     return true;
   }
@@ -327,9 +327,9 @@ public class Grid {
 
     // Working with auxiliar grid
     public void duplicateGrid(Grid x){
-      for(int i = 0;i<x.config.length;i++){
-        for(int j=0; j < x.config[i].length;j++){
-          this.config[i][j]=x.config[i][j];
+      for(int i = 0; i < x.config.length; i++){
+        for(int j=0; j < x.config[i].length; j++){
+          this.config[i][j] = x.config[i][j];
         }
       }
 

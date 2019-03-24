@@ -40,15 +40,15 @@ public class Play{
     for(int j = 0; j < 7; j++){
       if(aux.properPlay(j)){
         aux.duplicateGrid(grid);
-        aux.makePlay(j,nextPlayer);
+        aux.makePlay(j, nextPlayer);
 
-        if(nextPlayer==0) {
-          Play filho= new Play(aux, 1, j);
-          sons.add(filho);
+        if(nextPlayer == 0) {
+          Play son= new Play(aux, 1, j);
+          sons.add(son);
         }
         else{
-          Play filho = new Play(aux, 0, j);
-          sons.add(filho);
+          Play son = new Play(aux, 0, j);
+          sons.add(son);
         }
       }
     }

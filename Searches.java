@@ -37,7 +37,7 @@ public class Searches{
     for(Play w : play.sons){
       Play aux = new Play(w.grid, currentPlayer);
 
-      aux.duplicatePlay(minimax(w,depth+1, currentPlayer));
+      aux.duplicatePlay(minimax(w, depth+1, currentPlayer));
       currentValue = Math.min(currentValue, aux.value);
 
       if(currentValue < min){
@@ -80,7 +80,7 @@ public class Searches{
 
 
 
-  public Play alphaBeta(Play play, int depth, int currentPlayer,int alpha,int beta){ //Decisao
+  public Play alphaBeta(Play play, int depth, int currentPlayer, int alpha, int beta){ //Decisao
     int currentValue;
     if(play.grid.winnerCheck() != 0 || depth == maxDepth){
       play.value=play.grid.utility(currentPlayer);
@@ -88,33 +88,29 @@ public class Searches{
     }
 
     else if(currentPlayer == 0){ // Flag for CPU turn
-      currentValue = alphaBetaMaxfunction(play, currentPlayer, depth,alpha,beta).value;
+      currentValue = alphaBetaMaxfunction(play, play.proxjogador(currentPlayer), depth, alpha, beta).value;
       play.value = currentValue;
       return play;
     }
 
     else{ // Flag for player turn
-      currentValue = alphaBetaMinfunction(play, currentPlayer, depth,alpha,beta).value;
+      currentValue = alphaBetaMinfunction(play, play.proxjogador(currentPlayer), depth, alpha, beta).value;
       play.value = currentValue;
       return play;
     }
   }
 
-  private Play alphaBetaMaxfunction(Play play,int currentPlayer, int depth,int alpha,int beta){
+  private Play alphaBetaMaxfunction(Play play, int currentPlayer, int depth, int alpha, int beta){
     int currentValue = Integer.MIN_VALUE;
     int best = Integer.MIN_VALUE;
     int col = 0;
     play.beta=beta;
     play.getSons();
-    if(currentPlayer==1)
-    currentPlayer=0;
-    else{
-      currentPlayer=1;
-    }
+
     for(Play w : play.sons){
       Play aux = new Play(w.grid,currentPlayer);
-      aux.duplicatePlay(alphaBeta(w,depth+1, currentPlayer,play.alpha,play.beta));
-      currentValue = Math.max(currentValue,aux.value);
+      aux.duplicatePlay(alphaBeta(w, depth+1, currentPlayer, play.alpha, play.beta));
+      currentValue = Math.max(currentValue, aux.value);
       if(currentValue>best){
         best = currentValue;
         col = aux.col;
@@ -123,11 +119,11 @@ public class Searches{
         play.value = currentValue;
         return play;
       }
-      alpha = Math.max(alpha,currentValue);
+      alpha = Math.max(alpha, currentValue);
     }
 
-    play.value=currentValue;
-    if(depth==0) play.col = col;
+    play.value = currentValue;
+    if(depth == 0) play.col = col;
 
     return play;
   }
@@ -138,8 +134,6 @@ public class Searches{
     int col = 0;
     play.alpha=alpha;
     play.getSons();
-    if(currentPlayer == 1) currentPlayer = 0;
-    else currentPlayer = 1;
 
     for(Play w : play.sons){
       Play aux = new Play(w.grid,currentPlayer);
@@ -156,11 +150,11 @@ public class Searches{
         return play;
       }
 
-      beta = Math.min(beta,currentValue);
+      beta = Math.min(beta, currentValue);
     }
 
     play.value=currentValue;
-    if(depth==0) play.col = col;
+    if(depth == 0) play.col = col;
 
     return play;
   }
