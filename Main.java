@@ -5,9 +5,12 @@ public class Main{
   static int currentPlayer = 0;
 
   public static void main(String[] args) {
-    Scanner stdin=new Scanner (System.in);
+    Scanner stdin = new Scanner (System.in);
     FrontEnd visuals = new FrontEnd();
+    Searches CPU = new Searches();
+
     boolean restart = true;
+
     while(restart){
     int algorithm = 0;
 
@@ -20,6 +23,33 @@ public class Main{
     visuals.clearScreen();
 
     if(gameMode == 1){ // Single Player Mode
+      visuals.difficulty();
+      int difficulty = stdin.nextInt();
+
+      switch(difficulty){
+
+        case 1:
+          CPU.maxDepth = 1;
+          System.out.println();
+          System.out.print("Really? How old are you...?");
+        break;
+
+        case 2: CPU.maxDepth = 2;
+          System.out.println();
+          System.out.print("Well, ok. Good luck!");
+        break;
+
+        case 3: CPU.maxDepth = 4;
+          System.out.println();
+          System.out.print("Let's see if you can win ahah!");
+        break;
+
+        case 4: CPU.maxDepth = 7;
+          System.out.println();
+          System.out.print("You are actually crazy.");
+        break;
+      }
+
       visuals.firstPlayerMenu1();
       int firstPlayer = stdin.nextInt();
       visuals.clearScreen();
@@ -44,11 +74,10 @@ public class Main{
       else proxjogador();
     }
 
-      Searches CPU = new Searches();
       int op3 = 0;
 
       // Game started, then enters loop (it only ends when the game ends)
-      while(jogo.winnerCheck()==0){
+      while(jogo.winnerCheck() == 0){
 
         long startTime = System.currentTimeMillis();
 
@@ -63,6 +92,7 @@ public class Main{
             jogo.showGrid();
             proxjogador();
           }
+
           else{ // CPU is playing
             Play inicial = new Play(jogo, currentPlayer);
             Play play = null;
@@ -110,9 +140,9 @@ public class Main{
            visuals.sleep(2000);
            visuals.restart();
            int option1= stdin.nextInt();
-           if(option1==1) restart=true;
+           if(option1 == 1) restart = true;
 
-           else if(option1==2) restart=false;
+           else if(option1 == 2) restart = false;
 
            }
           else if(gameMode == 2) System.out.println("Player O won!");

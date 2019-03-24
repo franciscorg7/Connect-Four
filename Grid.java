@@ -325,8 +325,8 @@ public class Grid {
     else return 0;
   }
 
-
-    public void copy(Grid x){
+    // Working with auxiliar grid
+    public void duplicateGrid(Grid x){
       for(int i = 0;i<x.config.length;i++){
         for(int j=0; j < x.config[i].length;j++){
           this.config[i][j]=x.config[i][j];

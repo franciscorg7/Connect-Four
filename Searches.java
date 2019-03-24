@@ -3,93 +3,7 @@ import java.util.*;
 public class Searches{
 
   // Closer to 7, harder to defeat CPU mind
-  int maxDepth=5;
-
-  public Play alphaBeta(Play play, int depth, int currentPlayer,int alpha,int beta){ //Decisao
-    int currentValue;
-    if(play.grid.winnerCheck() != 0 || depth == maxDepth){
-      play.value=play.grid.utility(currentPlayer);
-      return play;
-    }
-
-    else if(currentPlayer == 0){ //PC turn
-      currentValue = alphaBetaMaxfunction(play, currentPlayer, depth,alpha,beta).value;
-      play.value = currentValue;
-      return play;
-    }
-
-    else{ //MY turn
-      currentValue = alphaBetaMinfunction(play, currentPlayer, depth,alpha,beta).value;
-      play.value = currentValue;
-      return play;
-    }
-  }
-
-  private Play alphaBetaMaxfunction(Play play,int currentPlayer, int depth,int alpha,int beta){
-    int currentValue = Integer.MIN_VALUE;
-    int best = Integer.MIN_VALUE;
-    int col = 0;
-    play.beta=beta;
-    play.getSons();
-    if(currentPlayer==1)
-    currentPlayer=0;
-    else{
-      currentPlayer=1;
-    }
-    for(Play w : play.sons){
-      Play aux = new Play(w.grid,currentPlayer);
-      aux.copyPlay(alphaBeta(w,depth+1, currentPlayer,play.alpha,play.beta));
-      currentValue = Math.max(currentValue,aux.value);
-      if(currentValue>best){
-        best = currentValue;
-        col = aux.col;
-      }
-      if(currentValue >= play.beta){
-        play.value=currentValue;
-        return play;
-      }
-      alpha=Math.max(alpha,currentValue);
-    }
-    play.value=currentValue;
-    if(depth==0)
-    play.col=col;
-    return play;
-  }
-
-  private Play alphaBetaMinfunction(Play play, int currentPlayer,int depth, int alpha,int beta) {
-    int currentValue = Integer.MAX_VALUE;
-    int best = Integer.MAX_VALUE;
-    int col = 0;
-    play.alpha=alpha;
-    play.getSons();
-    if (currentPlayer == 1)
-    currentPlayer = 0;
-    else {
-      currentPlayer = 1;
-    }
-    for (Play w : play.sons) {
-      Play aux = new Play(w.grid,currentPlayer);
-      aux.copyPlay(alphaBeta(w,depth+1, currentPlayer,alpha,beta));
-      currentValue = Math.min(currentValue, aux.value);
-      if(currentValue<best){
-        best = currentValue;
-        col = aux.col;
-      }
-      if(currentValue <= play.alpha){
-
-        play.value=currentValue;
-        return play;
-
-      }
-      beta=Math.min(beta,currentValue);
-
-    }
-    play.value=currentValue;
-    if(depth==0)
-    play.col=col;
-    return play;
-  }
-
+  public int maxDepth = 5;
 
   public Play minimax(Play play, int depth, int currentPlayer){
     int currentValue;
@@ -120,10 +34,10 @@ public class Searches{
 
     play.getSons();
 
-    for (Play w : play.sons){
+    for(Play w : play.sons){
       Play aux = new Play(w.grid, currentPlayer);
 
-      aux.copyPlay(minimax(w,depth+1, currentPlayer));
+      aux.duplicatePlay(minimax(w,depth+1, currentPlayer));
       currentValue = Math.min(currentValue, aux.value);
 
       if(currentValue < min){
@@ -134,7 +48,7 @@ public class Searches{
 
     play.value = currentValue;
 
-    if(depth==0) play.col=col;
+    if(depth==0) play.col = col;
 
     return play;
   }
@@ -148,7 +62,7 @@ public class Searches{
 
     for(Play w : play.sons){
       Play aux = new Play(w.grid, currentPlayer);
-      aux.copyPlay(minimax(w,depth+1, currentPlayer));
+      aux.duplicatePlay(minimax(w, depth+1, currentPlayer));
       currentValue = Math.max(currentValue, aux.value);
 
       if(currentValue > max){
@@ -160,6 +74,93 @@ public class Searches{
     play.value = currentValue;
 
     if(depth == 0) play.col = col;
+
+    return play;
+  }
+
+
+
+  public Play alphaBeta(Play play, int depth, int currentPlayer,int alpha,int beta){ //Decisao
+    int currentValue;
+    if(play.grid.winnerCheck() != 0 || depth == maxDepth){
+      play.value=play.grid.utility(currentPlayer);
+      return play;
+    }
+
+    else if(currentPlayer == 0){ // Flag for CPU turn
+      currentValue = alphaBetaMaxfunction(play, currentPlayer, depth,alpha,beta).value;
+      play.value = currentValue;
+      return play;
+    }
+
+    else{ // Flag for player turn
+      currentValue = alphaBetaMinfunction(play, currentPlayer, depth,alpha,beta).value;
+      play.value = currentValue;
+      return play;
+    }
+  }
+
+  private Play alphaBetaMaxfunction(Play play,int currentPlayer, int depth,int alpha,int beta){
+    int currentValue = Integer.MIN_VALUE;
+    int best = Integer.MIN_VALUE;
+    int col = 0;
+    play.beta=beta;
+    play.getSons();
+    if(currentPlayer==1)
+    currentPlayer=0;
+    else{
+      currentPlayer=1;
+    }
+    for(Play w : play.sons){
+      Play aux = new Play(w.grid,currentPlayer);
+      aux.duplicatePlay(alphaBeta(w,depth+1, currentPlayer,play.alpha,play.beta));
+      currentValue = Math.max(currentValue,aux.value);
+      if(currentValue>best){
+        best = currentValue;
+        col = aux.col;
+      }
+      if(currentValue >= play.beta){
+        play.value = currentValue;
+        return play;
+      }
+      alpha = Math.max(alpha,currentValue);
+    }
+
+    play.value=currentValue;
+    if(depth==0) play.col = col;
+
+    return play;
+  }
+
+  private Play alphaBetaMinfunction(Play play, int currentPlayer,int depth, int alpha,int beta) {
+    int currentValue = Integer.MAX_VALUE;
+    int best = Integer.MAX_VALUE;
+    int col = 0;
+    play.alpha=alpha;
+    play.getSons();
+    if(currentPlayer == 1) currentPlayer = 0;
+    else currentPlayer = 1;
+
+    for(Play w : play.sons){
+      Play aux = new Play(w.grid,currentPlayer);
+      aux.duplicatePlay(alphaBeta(w,depth+1, currentPlayer,alpha,beta));
+      currentValue = Math.min(currentValue, aux.value);
+
+      if(currentValue < best){
+        best = currentValue;
+        col = aux.col;
+      }
+
+      if(currentValue <= play.alpha){
+        play.value = currentValue;
+        return play;
+      }
+
+      beta = Math.min(beta,currentValue);
+    }
+
+    play.value=currentValue;
+    if(depth==0) play.col = col;
 
     return play;
   }

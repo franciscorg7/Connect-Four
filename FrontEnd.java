@@ -28,14 +28,28 @@ class FrontEnd{
     System.out.print("Option: ");
   }
 
-  static void firstPlayerMenu1(){
-    System.out.println(ANSI_CYAN +"WELCOME TO SINGLE PLAYER MODE" + ANSI_RESET);
+  static void difficulty(){
+
+    System.out.println(ANSI_CYAN +"WELCOME TO SINGLE-PLAYER MODE" + ANSI_RESET);
     System.out.println();
     sleep(1000);
-    System.out.println(ANSI_WHITE + "(Lets see if you can win)" + ANSI_RESET);
 
-    sleep(1500);
+    System.out.println("Choose the difficulty you want to play with:");
+    System.out.println();
+    System.out.println(ANSI_GREEN + "1) " + ANSI_RESET + "Beginner");
+    System.out.println(ANSI_YELLOW + "2) " + ANSI_RESET + "Intermediate");
+    System.out.println(ANSI_RED + "3) " + ANSI_RESET + "Professional");
+    System.out.println(ANSI_PURPLE + "4) " + ANSI_RESET + "Legendary");
+    System.out.println();
+    System.out.print("Option: ");
+
+  }
+
+  static void firstPlayerMenu1(){
+
+    sleep(2000);
     clearScreen();
+
     System.out.println("Who do you want to go first?");
     System.out.println();
     System.out.println(ANSI_CYAN + "1) " + ANSI_RESET + "Me");
@@ -64,19 +78,23 @@ class FrontEnd{
 
   static void winnerCPU(){
     System.out.println();
-    System.out.println(ANSI_CYAN + "CPU WON(predictable)!" + ANSI_RESET);
+    System.out.print(ANSI_CYAN + "CPU WON!" + ANSI_RESET);
+    sleep(1000);
+    System.out.println(" (Predictable)");
   }
 
   static void clearScreen(){
     System.out.print("\033[H\033[2J");
     System.out.flush();
   }
-  static void restart(){
-  System.out.println( "Do you want to try again?" );
-            System.out.print (ANSI_CYAN+ "1)" + ANSI_RESET + "Yes    ");
-            System.out.println(ANSI_CYAN + "2)" + ANSI_RESET  + "No");
 
-          }
+  static void restart(){
+    System.out.println( "Do you want to try again?" );
+    System.out.print (ANSI_CYAN+ "1) " + ANSI_RESET + "Yes    ");
+    System.out.println(ANSI_CYAN + "2) " + ANSI_RESET  + "No");
+    System.out.println();
+    System.out.print("Option: ");
+  }
 
   static void sleep(int a){
     try{
