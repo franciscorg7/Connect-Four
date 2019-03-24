@@ -128,10 +128,29 @@ public class Main{
 
         int winner = grid.winnerCheck();
         if(winner == 1){
-          if(gameMode == 1) System.out.println("You won (you were not suposed to)!");
-          else if(gameMode == 2) System.out.println("Player X won!");
-          break;
-        }
+          if(gameMode == 1){ System.out.println(visuals.ANSI_CYAN +"YOU WON (you were not suposed to)!" + visuals.ANSI_RESET );
+          System.out.println();
+          visuals.sleep(1000);
+          visuals.restart();
+          int restartOption1 = stdin.nextInt();
+
+           if(restartOption1 == 1) restart = true;
+           else if(restartOption1 == 2) restart = false;
+           }
+
+          else if(gameMode == 2){ System.out.println("Player X won!");
+           System.out.println();
+           visuals.sleep(1000);
+           visuals.restart();
+           int restartOption2 = stdin.nextInt();
+
+           if(restartOption2 == 1) restart = true;
+           else if(restartOption2== 2) restart = false;
+           }
+
+         }
+
+
 
         // CPU or Player2 won
         else if(winner == -1){
@@ -147,14 +166,23 @@ public class Main{
            else if(restartOption == 2) restart = false;
            }
 
-          else if(gameMode == 2) System.out.println("Player O won!");
-          break;
+          else if(gameMode == 2){ System.out.println("Player O won!");
+             System.out.println();
+           visuals.sleep(1000);
+           visuals.restart();
+           int restartOption3 = stdin.nextInt();
+
+           if(restartOption3 == 1) restart = true;
+           else if(restartOption3 == 2) restart = false;
+
+
         }
          else if(grid.gridFull()) System.out.println("Empate!");
       }
     }
-  }
 
+}
+}
     public static void proxjogador(){
       if(currentPlayer==0)
         currentPlayer=1;
