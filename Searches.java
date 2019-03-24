@@ -15,13 +15,13 @@ public class Searches{
     }
 
     else if(currentPlayer == 1){ // Flag for Player depth field
-      currentValue = minfunction(play, depth, play.proxjogador(currentPlayer)).value;
+      currentValue = minfunction(play, depth, play.nextPlayer(currentPlayer)).value;
       play.value = currentValue;
       return play;
     }
 
     else{ // Flag for CPU depth field
-      currentValue = maxfunction(play, depth, play.proxjogador(currentPlayer)).value;
+      currentValue = maxfunction(play, depth, play.nextPlayer(currentPlayer)).value;
       play.value = currentValue;
       return play;
     }
@@ -88,13 +88,13 @@ public class Searches{
     }
 
     else if(currentPlayer == 0){ // Flag for CPU turn
-      currentValue = alphaBetaMaxfunction(play, play.proxjogador(currentPlayer), depth, alpha, beta).value;
+      currentValue = alphaBetaMaxfunction(play, play.nextPlayer(currentPlayer), depth, alpha, beta).value;
       play.value = currentValue;
       return play;
     }
 
     else{ // Flag for player turn
-      currentValue = alphaBetaMinfunction(play, play.proxjogador(currentPlayer), depth, alpha, beta).value;
+      currentValue = alphaBetaMinfunction(play, play.nextPlayer(currentPlayer), depth, alpha, beta).value;
       play.value = currentValue;
       return play;
     }

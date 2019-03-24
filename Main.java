@@ -12,6 +12,7 @@ public class Main{
     boolean restart = true;
 
     while(restart){
+    currentPlayer = 0; // It is needed to reset currentPlayer after program restarts
     int algorithm = 0;
 
     visuals.title();
@@ -31,22 +32,22 @@ public class Main{
         case 1:
           CPU.maxDepth = 1;
           System.out.println();
-          System.out.print("Really? How old are you...?");
+          System.out.print(visuals.ANSI_CYAN + "MESSAGE: " + visuals.ANSI_RESET + "Really? What are you afraid of...?");
         break;
 
         case 2: CPU.maxDepth = 2;
           System.out.println();
-          System.out.print("Well, ok. Good luck!");
+          System.out.print(visuals.ANSI_CYAN + "MESSAGE: " + visuals.ANSI_RESET + "Well, ok. Good luck!");
         break;
 
         case 3: CPU.maxDepth = 4;
           System.out.println();
-          System.out.print("Let's see if you can win ahah!");
+          System.out.print(visuals.ANSI_CYAN + "MESSAGE: " + visuals.ANSI_RESET + "Let's see if you can win ahah!");
         break;
 
         case 4: CPU.maxDepth = 7;
           System.out.println();
-          System.out.print("You are actually crazy.");
+          System.out.print(visuals.ANSI_CYAN + "MESSAGE: " + visuals.ANSI_RESET + "You are actually crazy.");
         break;
       }
 
@@ -57,21 +58,31 @@ public class Main{
       visuals.algorithmMenu();
       algorithm = stdin.nextInt();
 
+      // Player goes first
       if(firstPlayer == 1){
         visuals.clearScreen();
         grid.showGrid();
         System.out.println();
         System.out.print("Play: ");
         int col = stdin.nextInt();
-        grid.makePlay(col, currentPlayer);
 
-        visuals.clearScreen();
+        if(grid.makePlay(col, currentPlayer) == 1){
+          visuals.clearScreen();
+          grid.showGrid();
 
-        grid.showGrid();
-        proxjogador();
+          nextPlayer();
+        }
+
+        else{
+          visuals.sleep(1000);
+          visuals.clearScreen();
+          grid.showGrid();
+          currentPlayer = 0;
+        }
       }
 
-      else proxjogador();
+      // CPU starts to play
+      else nextPlayer();
     }
 
       int col = 0;
@@ -87,10 +98,20 @@ public class Main{
             System.out.println();
             System.out.print("Play: ");
             col = stdin.nextInt();
-            grid.makePlay(col, currentPlayer);
-            visuals.clearScreen();
-            grid.showGrid();
-            proxjogador();
+
+            if(grid.makePlay(col, currentPlayer) == 1){
+              visuals.clearScreen();
+              grid.showGrid();
+
+              nextPlayer();
+            }
+
+            else{
+              visuals.sleep(1000);
+              visuals.clearScreen();
+              grid.showGrid();
+              currentPlayer = 0;
+            }
           }
 
           else{ // CPU is playing
@@ -110,7 +131,7 @@ public class Main{
             System.out.println(" > Generated plays: " + play.genPlays);
             play.genPlays = 0; // Resets each play
 
-            proxjogador();
+            nextPlayer();
           }
         }
 
@@ -119,38 +140,46 @@ public class Main{
           grid.showGrid();
           System.out.println();
           System.out.print("Play: "); col = stdin.nextInt();
-          grid.makePlay(col, currentPlayer);
-          System.out.println();
-          visuals.clearScreen();
-          proxjogador();
 
+          if(grid.makePlay(col, currentPlayer) == 1){
+            visuals.clearScreen();
+
+            nextPlayer();
+          }
+
+          else{
+            visuals.sleep(1000);
+            visuals.clearScreen();
+          }
         }
 
         int winner = grid.winnerCheck();
         if(winner == 1){
-          if(gameMode == 1){ System.out.println(visuals.ANSI_CYAN +"YOU WON (you were not suposed to)!" + visuals.ANSI_RESET );
+          if(gameMode == 1){
+          System.out.println();
+          System.out.println(visuals.ANSI_CYAN +"YOU WON!" + visuals.ANSI_RESET );
           System.out.println();
           visuals.sleep(1000);
           visuals.restart();
-          int restartOption1 = stdin.nextInt();
+          int restartOption = stdin.nextInt();
 
-           if(restartOption1 == 1) restart = true;
-           else if(restartOption1 == 2) restart = false;
+           if(restartOption == 1) restart = true;
+           else if(restartOption == 2) restart = false;
            }
 
-          else if(gameMode == 2){ System.out.println("Player X won!");
-           System.out.println();
-           visuals.sleep(1000);
-           visuals.restart();
-           int restartOption2 = stdin.nextInt();
+          else if(gameMode == 2){
+            System.out.println(visuals.ANSI_YELLOW + "- WE HAVE A WINNER -" + visuals.ANSI_RESET);
+            System.out.println();
+            System.out.println("(Player X won!)");
+            System.out.println();
+            visuals.sleep(1000);
+            visuals.restart();
+            int restartOption = stdin.nextInt();
 
-           if(restartOption2 == 1) restart = true;
-           else if(restartOption2== 2) restart = false;
-           }
-
+            if(restartOption == 1) restart = true;
+            else if(restartOption == 2) restart = false;
+          }
          }
-
-
 
         // CPU or Player2 won
         else if(winner == -1){
@@ -166,27 +195,31 @@ public class Main{
            else if(restartOption == 2) restart = false;
            }
 
-          else if(gameMode == 2){ System.out.println("Player O won!");
-             System.out.println();
-           visuals.sleep(1000);
-           visuals.restart();
-           int restartOption3 = stdin.nextInt();
+          else if(gameMode == 2){
+            System.out.println(visuals.ANSI_YELLOW + "- WE HAVE A WINNER -" + visuals.ANSI_RESET);
+            System.out.println();
+            System.out.println("(Player O won!)");
+            System.out.println();
+            visuals.sleep(1000);
+            visuals.restart();
+            int restartOption = stdin.nextInt();
 
-           if(restartOption3 == 1) restart = true;
-           else if(restartOption3 == 2) restart = false;
+            if(restartOption == 1) restart = true;
+            else if(restartOption == 2) restart = false;
+          }
 
+         else if(grid.gridFull()){
+           System.out.println("It's a draw!");
 
-        }
-         else if(grid.gridFull()) System.out.println("Empate!");
+         }
+       }
       }
     }
-
-}
-}
-    public static void proxjogador(){
-      if(currentPlayer==0)
-        currentPlayer=1;
-      else
-        currentPlayer=0;
-    }
   }
+
+  // Iterate throw currentPlayer value
+  public static void nextPlayer(){
+    if(currentPlayer==0) currentPlayer=1;
+    else currentPlayer=0;
+  }
+}

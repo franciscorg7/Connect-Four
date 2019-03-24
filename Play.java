@@ -66,7 +66,7 @@ public class Play{
     this.beta = x.beta;
   }
 
-  public static int proxjogador(int currentPlayer){
+  public static int nextPlayer(int currentPlayer){
     if(currentPlayer == 0) return 1;
     else return 0;
   }
