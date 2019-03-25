@@ -41,10 +41,11 @@ public class Grid {
 
   // Make a play and updates grid
   public int makePlay(int col, int nextPlayer){
-    if((col < 0 || col > 6) || colFull(col)) {
-      System.out.println("Invalid play");
+
+    if((col < 0 || col > 6) || colFull(col)){
       System.out.println();
-      return -1;
+      System.out.print(visuals.ANSI_RED + "WARNING: " + visuals.ANSI_RESET + "Invalid play");
+      return -1; // INVALID PLAY FLAG
     }
 
     switch(nextPlayer){
