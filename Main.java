@@ -164,7 +164,11 @@ public class Main{
           int restartOption = stdin.nextInt();
 
            if(restartOption == 1) restart = true;
-           else if(restartOption == 2) restart = false;
+           else if(restartOption == 2){
+            visuals.clearScreen();
+            visuals.goodbye();
+              restart = false;
+            }
            }
 
           else if(gameMode == 2){
@@ -177,7 +181,12 @@ public class Main{
             int restartOption = stdin.nextInt();
 
             if(restartOption == 1) restart = true;
-            else if(restartOption == 2) restart = false;
+            else if(restartOption == 2) {
+                visuals.clearScreen();
+              visuals.goodbye();
+
+            restart = false;
+          }
           }
          }
 
@@ -192,7 +201,11 @@ public class Main{
            int restartOption = stdin.nextInt();
 
            if(restartOption == 1) restart = true;
-           else if(restartOption == 2) restart = false;
+           else if(restartOption == 2){
+               visuals.clearScreen();
+              visuals.goodbye();
+             restart = false;
+           }
            }
 
           else if(gameMode == 2){
@@ -205,14 +218,33 @@ public class Main{
             int restartOption = stdin.nextInt();
 
             if(restartOption == 1) restart = true;
-            else if(restartOption == 2) restart = false;
+            else if(restartOption == 2){
+              visuals.clearScreen();
+              visuals.goodbye();
+              restart = false;
+            }
           }
+  }
+
 
          else if(grid.gridFull()){
-           System.out.println("It's a draw!");
+            visuals.clearScreen();
+           System.out.println(visuals.ANSI_CYAN +"It's a draw!" + visuals.ANSI_RESET);
+             System.out.println();
+            visuals.sleep(1000);
+            visuals.restart();
+            int restartOption = stdin.nextInt();
 
-         }
-       }
+            if(restartOption == 1) {restart = true; break;}
+            else if(restartOption == 2){
+              visuals.clearScreen();
+              visuals.goodbye();
+
+              return;
+
+            }
+          }
+
       }
     }
   }

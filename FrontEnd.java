@@ -95,6 +95,11 @@ class FrontEnd{
     System.out.println();
     System.out.print("Option: ");
   }
+  static void goodbye(){
+    sleep(1000);
+  System.out.println(ANSI_CYAN + "GOODBYE! Thanks for playing with us!" + ANSI_RESET) ;
+    sleep(1000);
+  }
 
   static void sleep(int a){
     try{
