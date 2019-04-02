@@ -11,6 +11,8 @@ public class Play{
   int value;
   int alpha;
   int beta;
+  int visits; int wins; // For MCTS algorithm
+  Play father;
 
   public Play (Grid grid, int nextPlayer, int col){
     this.grid = new Grid();
@@ -26,7 +28,7 @@ public class Play{
   public Play (Grid grid, int nextPlayer){
     this.grid = new Grid();
     this.grid.duplicateGrid(grid);
-    this.nextPlayer=nextPlayer;
+    this.nextPlayer = nextPlayer;
     this.col = 0;
     this.value = 0;
     this.alpha = Integer.MIN_VALUE;
@@ -65,6 +67,25 @@ public class Play{
     this.alpha = x.alpha;
     this.beta = x.beta;
   }
+
+  double UCTValue(){
+
+    Searches s = new Searches();
+
+    int n  = this.visits;
+    int N = this.father.visits;
+    int w = this.wins;
+
+    // If this play has never been visited, UCT = +oo
+    if (n == 0 || N == 0) return Double.MAX_VALUE;
+
+    // Else, use the formula
+    double X = (double) (w / n);
+    double C = 1 / Math.sqrt(2.0);
+    double L = Math.sqrt(s.ln(N) / n);
+
+    return X + C*L;
+}
 
   public static int nextPlayer(int currentPlayer){
     if(currentPlayer == 0) return 1;

@@ -45,7 +45,7 @@ public class Main{
           System.out.print(visuals.ANSI_CYAN + "MESSAGE: " + visuals.ANSI_RESET + "Let's see if you can win ahah!");
         break;
 
-        case 4: CPU.maxDepth = 7;
+        case 4: CPU.maxDepth = 6;
           System.out.println();
           System.out.print(visuals.ANSI_CYAN + "MESSAGE: " + visuals.ANSI_RESET + "You are actually crazy.");
         break;
