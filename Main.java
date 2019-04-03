@@ -118,7 +118,8 @@ public class Main{
             Play root = new Play(grid, currentPlayer);
             Play play = null;
             if(algorithm == 1) play = CPU.minimax(root, 0, currentPlayer);
-            else play = CPU.alphaBeta(root, 0, currentPlayer, root.alpha, root.beta);
+            else if(algorithm == 2) play = CPU.alphaBeta(root, 0, currentPlayer, root.alpha, root.beta);
+            else if(algorithm == 3) play = CPU.MCTS(root, currentPlayer, 0);
 
             grid.makePlay(play.col, currentPlayer);
             visuals.sleep(500);
@@ -164,11 +165,7 @@ public class Main{
           int restartOption = stdin.nextInt();
 
            if(restartOption == 1) restart = true;
-           else if(restartOption == 2){
-            visuals.clearScreen();
-            visuals.goodbye();
-              restart = false;
-            }
+           else if(restartOption == 2) restart = false;
            }
 
           else if(gameMode == 2){
@@ -181,12 +178,7 @@ public class Main{
             int restartOption = stdin.nextInt();
 
             if(restartOption == 1) restart = true;
-            else if(restartOption == 2) {
-                visuals.clearScreen();
-              visuals.goodbye();
-
-            restart = false;
-          }
+            else if(restartOption == 2) restart = false;
           }
          }
 
@@ -201,11 +193,7 @@ public class Main{
            int restartOption = stdin.nextInt();
 
            if(restartOption == 1) restart = true;
-           else if(restartOption == 2){
-               visuals.clearScreen();
-              visuals.goodbye();
-             restart = false;
-           }
+           else if(restartOption == 2) restart = false;
            }
 
           else if(gameMode == 2){
@@ -218,33 +206,14 @@ public class Main{
             int restartOption = stdin.nextInt();
 
             if(restartOption == 1) restart = true;
-            else if(restartOption == 2){
-              visuals.clearScreen();
-              visuals.goodbye();
-              restart = false;
-            }
+            else if(restartOption == 2) restart = false;
           }
-  }
-
 
          else if(grid.gridFull()){
-            visuals.clearScreen();
-           System.out.println(visuals.ANSI_CYAN +"It's a draw!" + visuals.ANSI_RESET);
-             System.out.println();
-            visuals.sleep(1000);
-            visuals.restart();
-            int restartOption = stdin.nextInt();
+           System.out.println("It's a draw!");
 
-            if(restartOption == 1) {restart = true; break;}
-            else if(restartOption == 2){
-              visuals.clearScreen();
-              visuals.goodbye();
-
-              return;
-
-            }
-          }
-
+         }
+       }
       }
     }
   }

@@ -68,24 +68,11 @@ public class Play{
     this.beta = x.beta;
   }
 
-  double UCTValue(){
+  // A play is leaf if there is some winner
+  public boolean isLeaf() {
+    return this.grid.winnerCheck() != 0;
+  }
 
-    Searches s = new Searches();
-
-    int n  = this.visits;
-    int N = this.father.visits;
-    int w = this.wins;
-
-    // If this play has never been visited, UCT = +oo
-    if (n == 0 || N == 0) return Double.MAX_VALUE;
-
-    // Else, use the formula
-    double X = (double) (w / n);
-    double C = 1 / Math.sqrt(2.0);
-    double L = Math.sqrt(s.ln(N) / n);
-
-    return X + C*L;
-}
 
   public static int nextPlayer(int currentPlayer){
     if(currentPlayer == 0) return 1;

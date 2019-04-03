@@ -9,7 +9,9 @@ public class Searches{
   public double expParam = Math.sqrt(2);
 
   // Random number for simulation process
-  public Random random = new Random();
+  public Random r = new Random();
+
+  static double epsilon = 1e-6;
 
   public Play minimax(Play play, int depth, int currentPlayer){
     int currentValue;
@@ -149,7 +151,7 @@ public class Searches{
     play.getSons();
 
     for(Play w : play.sons){
-      Play aux = new Play(w.grid,currentPlayer);
+      Play aux = new Play(w.grid, currentPlayer);
       aux.duplicatePlay(alphaBeta(w, depth+1, currentPlayer,alpha,beta));
       currentValue = Math.min(currentValue, aux.value);
 
@@ -178,57 +180,69 @@ public class Searches{
 
   public Play MCTS(Play play, int currentPlayer, int depth){
 
+    int col = 0;;
+    List<Play> visited = new LinkedList<>();
     Play cur = play;
+    visited.add(play);
 
-    // SELECT
-    while(depth < 4){
+    while(!cur.isLeaf()){
       cur = select(cur);
+      visited.add(cur);
     }
 
-    // EXPAND
-    play.nextPlayer(currentPlayer);
-    expand(cur, currentPlayer);
+    expand(cur);
+    Play newChild = select(cur);
+    double value = rollOut(newChild);
 
-    // SIMULATION
-    cur.getSons();
-    if(cur.sons.size() > 0){
-      cur = rollout(cur, currentPlayer);
+    for(Play w : visited){
+      backPropag(w, value);
+      col = w.col;
     }
-    return cur;
+
+    play.col = col;
+    return play;
   }
 
   private Play select(Play play){
-    Play selectedPlay = null;
-    double bestValue = Integer.MIN_VALUE;
-
+    int col = 0;
+    Play selected = null;
+    double bestValue = Double.MIN_VALUE;
+    play.getSons();
     for(Play w : play.sons){
-      double value = w.UCTValue();
-      if(value > bestValue){
-        bestValue = value;
-        selectedPlay = w;
+      double uctValue = w.value / (w.visits + epsilon) + Math.sqrt(ln(w.visits + 1) / (w.visits + epsilon)) + r.nextDouble() * epsilon;
+      if(uctValue > bestValue){
+        selected = w;
+        bestValue = uctValue;
       }
     }
-    return selectedPlay;
+
+    return selected;
   }
 
-  private void expand(Play play, int currentPlayer){
-      for(int i = 0; i < 7; i++){
-        play.getSons();
-        play.sons.get(0); // Expand through first child created
-      }
+  private void expand(Play play){
+    play.getSons();
   }
 
-  private Play rollout(Play play, int currentPlayer){
-
+  // Simulation step
+  private double rollOut(Play play){
     Play aux = play;
+    int random = 0;
+    double uctValue = 0.0;
 
-    while(play.grid.winnerCheck() == 0){
-      int randomIndex = (int) (Math.random()*((6-0) + 1));
-      play.getSons();
-      aux = play.sons.get(randomIndex);
+    while(aux.grid.winnerCheck() == 0){
+      aux.getSons();
+      int size = aux.sons.size();
+      random = r.nextInt(size);
+      aux = aux.sons.get(random);
+      uctValue = aux.value / (aux.visits + epsilon) + Math.sqrt(ln(aux.visits + 1) / (aux.visits + epsilon)) + r.nextDouble() * epsilon;
     }
 
-    return aux;
+    return uctValue;
+  }
+
+  public void backPropag(Play play, double val) {
+    play.visits++;
+    play.value += val;
   }
 
   // Auxiliar to ln()
