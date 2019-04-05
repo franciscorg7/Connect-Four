@@ -176,30 +176,34 @@ public class Searches{
   }
 
 
-  // MCTS is not working...
+  // MCTS is not working properly...
 
-  public Play MCTS(Play play, int currentPlayer, int depth){
+  public Play MCTS(Play play, int currentPlayer){
 
     int col = 0;;
-    List<Play> visited = new LinkedList<>();
-    Play cur = play;
-    visited.add(play);
 
-    while(!cur.isLeaf()){
-      cur = select(cur);
-      visited.add(cur);
+    for(int i=0; i < 1000; i++){
+
+      List<Play> visited = new LinkedList<>();
+      Play cur = play;
+      visited.add(play);
+
+      while(!cur.isLeaf()){
+        cur = select(cur);
+        visited.add(cur);
+      }
+
+      expand(cur);
+      Play newChild = select(cur);
+      double value = rollOut(newChild);
+
+      for(Play w : visited){
+        backPropag(w, value);
+        col = w.col;
+      }
+
+      play.col = col;
     }
-
-    expand(cur);
-    Play newChild = select(cur);
-    double value = rollOut(newChild);
-
-    for(Play w : visited){
-      backPropag(w, value);
-      col = w.col;
-    }
-
-    play.col = col;
     return play;
   }
 

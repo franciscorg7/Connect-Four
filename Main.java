@@ -119,7 +119,7 @@ public class Main{
             Play play = null;
             if(algorithm == 1) play = CPU.minimax(root, 0, currentPlayer);
             else if(algorithm == 2) play = CPU.alphaBeta(root, 0, currentPlayer, root.alpha, root.beta);
-            else if(algorithm == 3) play = CPU.MCTS(root, currentPlayer, 0);
+            else if(algorithm == 3) play = CPU.MCTS(root, currentPlayer);
 
             grid.makePlay(play.col, currentPlayer);
             visuals.sleep(500);
